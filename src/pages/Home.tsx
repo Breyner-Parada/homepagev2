@@ -10,6 +10,7 @@ import { Plane } from "../models/Plane";
 
 import sakura from "../assets/sakura.mp3";
 import { soundoff, soundon } from "../assets/icons";
+import { OrbitControls } from "@react-three/drei";
 
 export const Home = () => {
   const audioRef = useRef<HTMLAudioElement>(new Audio(sakura));
@@ -57,7 +58,7 @@ export const Home = () => {
   const [planeScale, planePosition] = adjustPlaneForScreenSize();
 
   return (
-    <section className="w-full h-screen relative">
+    <section className={`w-full relative ${window.innerWidth < 768 ? "h-[calc(100vh-50px)]" : "h-screen"}`}>
       <div className="absolute top-28 left-0 right-0 z-10 flex items-center justify-center">
         {currentStage && <HomeInfo currentStage={currentStage} />}
       </div>
@@ -76,6 +77,11 @@ export const Home = () => {
           <hemisphereLight groundColor="#000000" intensity={1} />
           <Bird />
           <Sky isRotating={isRotating} />
+          <OrbitControls
+            enableZoom={false}
+            maxPolarAngle={Math.PI / 2}
+            minPolarAngle={Math.PI / 2}
+          />
           <IslandModel
             position={islandPosition as [number, number, number]}
             scale={islandScale as [number, number, number]}
@@ -97,7 +103,7 @@ export const Home = () => {
           src={!isPlaying ? soundoff : soundon}
           alt="Sound"
           className="w-10 h-10 cursor-pointer object-contain"
-          onClick={() => setIsPlaying(prev => !prev)}
+          onClick={() => setIsPlaying((prev) => !prev)}
         />
       </div>
     </section>
